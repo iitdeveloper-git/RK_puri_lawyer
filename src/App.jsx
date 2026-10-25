@@ -161,10 +161,47 @@ function PageContent({ html }) {
 }
 
 export function App({ path = '/' }) {
-  useEffect(() => { if (window.location.pathname === '/contact/' && new URLSearchParams(window.location.search).get('enquiry') === 'consultation') { const field = document.querySelector('select[name="enquiry"]'); if (field) field.value = 'Consultation & fee enquiry'; } }, []);
-  const currentPath = normalise(path);
-  const page = pages[currentPath] || pages['/404/'];
-  return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement/><FloatingActions/></>;
+  const [currentPath, setCurrentPath] = useState(() => normalise(typeof window !== 'undefined' ? window.location.pathname : path));
+
+  useEffect(() => {
+    function handleLocation() {
+      const p = normalise(window.location.pathname);
+      setCurrentPath(p);
+      if (p === '/contact/' && new URLSearchParams(window.location.search).get('enquiry') === 'consultation') {
+        const field = document.querySelector('select[name="enquiry"]');
+        if (field) field.value = 'Consultation & fee enquiry';
+      }
+    }
+    function handleClick(e) {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('/') && !href.startsWith('//') && !anchor.target && !anchor.hasAttribute('download')) {
+        const [targetPath, hash] = href.split('#');
+        if (targetPath && normalise(targetPath) !== currentPath) {
+          e.preventDefault();
+          window.history.pushState({}, '', href);
+          setCurrentPath(normalise(targetPath));
+          if (hash) {
+            setTimeout(() => document.getElementById(hash)?.scrollIntoView(), 0);
+          } else {
+            window.scrollTo(0, 0);
+          }
+        }
+      }
+    }
+    window.addEventListener('popstate', handleLocation);
+    document.addEventListener('click', handleClick);
+    handleLocation();
+    return () => {
+      window.removeEventListener('popstate', handleLocation);
+      document.removeEventListener('click', handleClick);
+    };
+  }, [currentPath]);
+
+  const activePath = normalise(typeof window !== 'undefined' ? currentPath : path);
+  const page = pages[activePath] || pages['/404/'];
+  return <><a className="skip" href="#main">Skip to content</a><Header path={activePath}/><main id="main" className={activePath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{activePath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement/><FloatingActions/></>;
 }
 
 export { pages, normalise };
