@@ -1,7 +1,7 @@
 import React from 'react';
 import { hydrateRoot, createRoot } from 'react-dom/client';
 import { App } from './App.jsx';
-import '../assets/style.css';
+import './style.css';
 
 const root = document.getElementById('root');
 const app = <App path={window.location.pathname} />;

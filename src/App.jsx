@@ -2,14 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import parse, { domToReact } from 'html-react-parser';
 import pages from './content/pages.json';
 
-const nav = [
-  ['Home', '/'], ['About', '/about/'], ['Practice Areas', '/practice-areas/'],
-  ['Experience', '/investigation-expertise/'], ['Courts & Forums', '/courts-and-forums/'],
-  ['Insights', '/insights/'], ['Contact', '/contact/'],
-];
-// Add only URLs approved by the practice. Empty values stay hidden.
+const nav = [['Home','/'],['About Us','/about/'],['Services','/services/'],['Practice Areas','/practice-areas/'],['Our Team','/team/'],['Contact','/contact/']];
 const socialLinks = [
-  ['LinkedIn', ''], ['Instagram', ''], ['Facebook', ''],
+  ['LinkedIn', 'https://www.linkedin.com/in/rakesh-kumar-puri-0918181a9/'], ['Instagram', ''], ['Facebook', ''],
 ];
 
 function SocialIcon({ name }) {
@@ -25,25 +20,58 @@ function normalise(path) {
 function Header({ path }) {
   const [open, setOpen] = useState(false);
   return <header className="site-header"><div className="shell header-inner">
-    <a className="brand" href="/" aria-label="Rakesh Puri & Associates home"><span className="brand-monogram">RP</span><span><strong>RAKESH PURI <em>&amp;</em> ASSOCIATES</strong><small>ADVOCATES &amp; LEGAL CONSULTANTS</small></span></a>
+    <a className="brand" href="/" aria-label="R.K. Puri Law & Associates home"><span className="brand-monogram">RP</span><span><strong>R.K. PURI LAW <em>&amp;</em> ASSOCIATES</strong><small>CRIMINAL LAW · INVESTIGATION · LITIGATION</small></span></a>
     <button className="menu-toggle" type="button" aria-controls="site-nav" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}><span/><span/><span/></button>
     <nav id="site-nav" className={`site-nav${open ? ' open' : ''}`} aria-label="Main navigation">
       {nav.map(([label, href]) => <a key={href} href={href} className={path === href ? 'active' : ''} onClick={() => setOpen(false)}>{label}</a>)}
-      <a className="nav-cta" href="/contact/">Contact Chambers</a>
+      <a className="nav-cta" href="/contact/?enquiry=consultation#contact-form">Ask for Rates / Consultation</a>
     </nav>
   </div></header>;
 }
 
 function Footer() {
   return <footer className="site-footer"><div className="shell footer-grid">
-    <div className="footer-about"><div className="footer-mark">RP<span>.</span></div><h2>Rakesh Puri &amp; Associates</h2><p className="footer-descriptor">Advocates &amp; Legal Consultants</p><p>A practice informed by decades of investigation experience and focused on careful legal advocacy in Rajasthan.</p></div>
-    <div><h3>Principal Practice</h3><a href="/practice-areas/criminal-law/">Criminal Law</a><a href="/practice-areas/writ-jurisdiction/">Constitutional Writs</a><a href="/investigation-expertise/">Investigation &amp; Evidence</a><a href="/practice-areas/">All Practice Areas</a></div>
-    <div><h3>Explore</h3><a href="/about/">About the Practice</a><a href="/professional-profile/">Professional Profile</a><a href="/courts-and-forums/">Courts &amp; Forums</a><a href="/insights/">Insights</a></div>
-    <div><h3>Information</h3><a href="/contact/">Contact Chambers</a><a href="/disclaimer/">Disclaimer</a><a href="/privacy-policy/">Privacy Policy</a><a href="/terms/">Terms of Use</a></div>
-    <div className="footer-contact"><h3>Contact</h3><a href="tel:+919414432758" className="footer-phone">+91 94144 32758</a><span>Rajasthan, India</span><p>Appointments and professional enquiries by phone.</p></div>
+    <div className="footer-about">
+      <div className="footer-mark">RKP<span>.</span></div>
+      <h2>R.K. Puri Law</h2>
+      <p className="footer-descriptor">Criminal Law | Investigation Advisory | Litigation</p>
+      <p>A Jodhpur-based legal practice led by Rakesh Puri, advocate and retired Additional Superintendent of Police, combining 35 years of policing and investigative experience with 11 years of criminal legal practice.</p>
+    </div>
+    <div>
+      <h3>Services &amp; Rates</h3>
+      <a href="/services/litigation-advisory/">Litigation &amp; Advisory</a>
+      <a href="/services/forensics/">Forensics &amp; Evidence</a>
+      <a href="/services/investigations/">Investigations Advisory</a>
+      <a href="/contact/?enquiry=consultation#contact-form">Ask for Consultation Rates</a>
+      <a href="/practice-areas/criminal-law/">Criminal Defence</a>
+      <a href="/practice-areas/">All Practice Areas</a>
+    </div>
+    <div>
+      <h3>Chambers &amp; Team</h3>
+      <a href="/">Home</a>
+      <a href="/about/">About Us</a>
+      <a href="/team/">Our Team &amp; Advocates</a>
+      <a href="/professional-profile/">Founder Profile</a>
+      <a href="/courts-and-forums/">Courts &amp; Forums</a>
+      <a href="/contact/">Enquire Chambers</a>
+    </div>
+    <div>
+      <h3>Policies &amp; Notice</h3>
+      <a href="/non-solicitation-policy/">Non-Solicitation Policy</a>
+      <a href="/disclaimer/">Bar Council Disclaimer</a>
+      <a href="/privacy-policy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Use</a>
+    </div>
+    <div className="footer-contact">
+      <h3>Office &amp; Contact</h3>
+      <p className="footer-address">18-A, Bheru Villas, Golf Course Road, Ratanada, Jodhpur, Rajasthan, India.</p>
+      <a href="tel:+919414432758" className="footer-phone">+91 94144 32758</a>
+      <a href="mailto:Rkpur6@gmail.com" className="footer-email">Rkpur6@gmail.com</a>
+      <a href="mailto:Mrluckysing003@gmail.com" className="footer-email">Mrluckysing003@gmail.com</a>
+    </div>
   </div>{socialLinks.some(([, url]) => url.startsWith('https://')) && <div className="shell footer-social"><strong>Professional profiles</strong>{socialLinks.filter(([, url]) => url.startsWith('https://')).map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener noreferrer" aria-label={`${name} profile`}><SocialIcon name={name}/><span>{name}</span></a>)}</div>}
-  <div className="shell footer-caution">Website information is general and does not constitute legal advice or create an advocate–client relationship. Please contact chambers to confirm information relevant to a particular matter.</div>
-  <div className="shell footer-bottom"><span>© 2026 Rakesh Puri &amp; Associates</span><span>Developed by <a href="https://iitdeveloper.com/" target="_blank" rel="noopener noreferrer">IITdeveloper</a></span></div>
+  <div className="shell footer-caution">The content of this website is intended for general informational purposes only and does not constitute legal advice. Accessing this website or submitting an enquiry does not, by itself, establish an advocate-client relationship. Any engagement is subject to acceptance by the firm, applicable professional obligations, and agreed terms.</div>
+  <div className="shell footer-bottom"><span>© 2026 R.K. Puri Law. All rights reserved.</span><span>Developed by <a href="https://iitdeveloper.com/" target="_blank" rel="noopener noreferrer">IITdeveloper</a></span></div>
   <div className="shell photo-credit">Court photograph: <a href="https://commons.wikimedia.org/wiki/File:New_Rajasthan_High_Court_Building.jpg" target="_blank" rel="noopener noreferrer">TrendSPLEND / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Format unchanged.</div></footer>;
 }
 
@@ -75,7 +103,7 @@ function Acknowledgement() {
   return <div className="ack" ref={dialog} role="dialog" aria-modal="true" aria-labelledby="ack-title" hidden={!visible} onKeyDown={trapFocus}><div className="ack-card">
     <p className="eyebrow">VISITOR ACKNOWLEDGEMENT</p><h2 id="ack-title">Before you continue</h2>
     <p>This website contains general information about the professional background and practice of Rakesh Puri &amp; Associates. It is not an advertisement, solicitation, or legal advice. Visiting it does not create an advocate–client relationship.</p>
-    <p>By continuing, you confirm that you are seeking information of your own accord. Please review the <a href="/disclaimer/">full disclaimer</a>.</p>
+    <p>By continuing, you confirm that you are seeking information of your own accord. Please review the <a href="/disclaimer/">full disclaimer</a> and <a href="/non-solicitation-policy/">non-solicitation policy</a>.</p>
     <button id="ack-accept" className="button button-dark" type="button" onClick={accept}>I understand</button>
   </div></div>;
 }
@@ -96,6 +124,7 @@ function ContactForm({ domNode }) {
     const data = new FormData(form);
     const lines = [
       'Professional enquiry for Rakesh Puri & Associates',
+      `Enquiry type: ${String(data.get('enquiry') || '').trim()}`,
       `Name: ${String(data.get('name') || '').trim()}`,
       `Phone: ${String(data.get('phone') || '').trim()}`,
       `Matter category: ${String(data.get('category') || '').trim()}`,
@@ -132,6 +161,7 @@ function PageContent({ html }) {
 }
 
 export function App({ path = '/' }) {
+  useEffect(() => { if (window.location.pathname === '/contact/' && new URLSearchParams(window.location.search).get('enquiry') === 'consultation') { const field = document.querySelector('select[name="enquiry"]'); if (field) field.value = 'Consultation & fee enquiry'; } }, []);
   const currentPath = normalise(path);
   const page = pages[currentPath] || pages['/404/'];
   return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement/><FloatingActions/></>;

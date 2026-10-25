@@ -1,6 +1,6 @@
 <div align="center">
 
-![Rakesh Puri & Associates — website project](assets/readme-banner.svg)
+![Rakesh Puri & Associates — website project](public/readme-banner.svg)
 
 # Rakesh Puri & Associates
 
@@ -90,31 +90,32 @@ After a deploy, Netlify's **Deploy File Explorer** should show `index.html` dire
 
 ```text
 .
-├── assets/
-│   ├── style.css                 # Design and responsive styles
-│   ├── favicon.svg               # RK Puri site icon
-│   ├── rajasthan-high-court.jpg  # Licensed court photograph
-│   ├── social-card.png            # Open Graph / LinkedIn preview
-│   └── readme-banner.svg         # Repository cover art
-├── src/App.jsx                   # React shell and interactive components
-├── src/content/pages.json        # Content and metadata for all 15 routes
-├── src/main.jsx                  # Browser hydration entry
-├── scripts/prerender.mjs         # Writes route-specific HTML and sitemap
-├── scripts/validate.mjs          # Checks output pages, links and metadata
-├── public/                       # Images and favicon copied to the build
-│   ├── placeholder-chambers.webp # Temporary home hero image
-│   └── placeholder-research.webp # Temporary About page image
+├── public/                       # Static public assets (images, icons, banner)
+│   ├── apple-touch-icon.png      # Home-screen icon
+│   ├── bhagirath-singh.jpg       # Team member photograph
 │   ├── favicon.svg               # Vector browser icon
-│   ├── favicon.ico               # Classic browser fallback
-│   ├── favicon-32.png            # PNG browser fallback
-│   └── apple-touch-icon.png      # Home-screen icon
-├── netlify.toml                  # Netlify build and publish settings
-├── LAUNCH_NOTES.md               # Page review and required client approvals
-├── SOCIAL_BIOS.md                # Suggested social-profile copy
-└── dist/                         # Generated static output
+│   ├── favicon.ico               # Classic browser icon
+│   ├── favicon-32.png            # PNG browser icon
+│   ├── placeholder-chambers.webp # Illustrative chambers visual
+│   ├── placeholder-research.webp # Illustrative research visual
+│   ├── rajasthan-high-court.jpg  # Rajasthan High Court photograph
+│   ├── rakesh-kumar-puri.jpg     # Founder advocate portrait
+│   ├── readme-banner.svg         # Project banner
+│   └── social-card.png           # Open Graph / social preview
+├── src/                          # Application source code
+│   ├── content/
+│   │   └── pages.json            # Content and metadata for all 21 routes
+│   ├── App.jsx                   # React shell and layout components
+│   ├── main.jsx                  # Client hydration entry
+│   └── style.css                 # Clean CSS styling (Taylor Wessing aesthetic)
+├── scripts/
+│   └── prerender.mjs             # Static site generator for SEO (pre-renders all 21 pages)
+├── index.html                    # Root HTML entry point
+├── package.json                  # Dependencies and build scripts
+└── netlify.toml                  # Deployment configuration
 ```
 
-Edit page content in `src/content/pages.json`, the shared layout and controls in `src/App.jsx`, and styling in `assets/style.css`. Then run `npm run build`. `dist/` is committed so static hosting can serve the current output directly.
+Edit page content in `src/content/pages.json`, the shared layout in `src/App.jsx`, and styling in `src/style.css`. Then run `npm run build`.
 
 ## 🎨 Design and imagery
 
@@ -130,7 +131,7 @@ The professional-profile portrait area remains an RKP monogram until an authenti
 
 ### Favicon
 
-The RK monogram is provided as SVG, PNG, ICO and Apple touch icon variants. All pages include the corresponding icon links. Edit `public/favicon.svg` and run `npm run icons` to regenerate the raster and ICO variants, then run `npm run build`.
+The RK monogram is provided in `public/` as SVG, PNG, ICO and Apple touch icon variants. All pages include the corresponding icon links.
 
 ## 📞 Contact behaviour
 
