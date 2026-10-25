@@ -108,8 +108,6 @@ After a deploy, Netlify's **Deploy File Explorer** should show `index.html` dire
 │   ├── App.jsx                   # React shell and layout components
 │   ├── main.jsx                  # Client hydration entry
 │   └── style.css                 # Clean CSS styling (Taylor Wessing aesthetic)
-├── scripts/
-│   └── prerender.mjs             # Static site generator for SEO (pre-renders all 21 pages)
 ├── index.html                    # Root HTML entry point
 ├── package.json                  # Dependencies and build scripts
 └── netlify.toml                  # Deployment configuration
