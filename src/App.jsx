@@ -117,24 +117,67 @@ function FloatingActions() {
 
 function ContactForm({ domNode }) {
   const attributes = domNode.attribs || {};
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
     const data = new FormData(form);
+
+    const name = String(data.get('name') || '').trim();
+    const phone = String(data.get('phone') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const enquiry = String(data.get('enquiry') || '').trim();
+    const category = String(data.get('category') || '').trim();
+    const message = String(data.get('message') || '').trim();
+
+    const status = form.querySelector('#form-status');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    if (status) status.textContent = 'Saving enquiry and preparing WhatsApp...';
+
+    // 1. Dispatch lead intake to IITDeveloper Central Gateway
+    try {
+      await fetch('https://api.iitdeveloper.com/api/dispatch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: 'rkpurilaw',
+          event_type: 'inquiry.received',
+          category: category || enquiry || 'consultation',
+          contact: {
+            name,
+            phone,
+            email: email || undefined,
+          },
+          message,
+          fields: [
+            { label: 'Enquiry Type', value: enquiry || 'General Consultation' },
+            { label: 'Matter Category', value: category || 'General Legal' },
+          ],
+          metadata: {
+            source_url: typeof window !== 'undefined' ? window.location.href : '',
+          },
+        }),
+      });
+    } catch (err) {
+      console.warn('IITDeveloper intake warning:', err);
+    }
+
     const lines = [
       'Professional enquiry for Rakesh Puri & Associates',
-      `Enquiry type: ${String(data.get('enquiry') || '').trim()}`,
-      `Name: ${String(data.get('name') || '').trim()}`,
-      `Phone: ${String(data.get('phone') || '').trim()}`,
-      `Matter category: ${String(data.get('category') || '').trim()}`,
-      `Message: ${String(data.get('message') || '').trim()}`,
+      `Enquiry type: ${enquiry}`,
+      `Name: ${name}`,
+      `Phone: ${phone}`,
+      `Matter category: ${category}`,
+      `Message: ${message}`,
     ];
-    const email = String(data.get('email') || '').trim();
     if (email) lines.splice(3, 0, `Email: ${email}`);
-    const status = form.querySelector('#form-status');
-    if (status) status.textContent = 'Opening WhatsApp. Review your message there before sending.';
+    if (status) status.textContent = 'Enquiry saved. Opening WhatsApp...';
+
     window.location.assign(`https://wa.me/919414432758?text=${encodeURIComponent(lines.join('\n'))}`);
+    if (submitBtn) submitBtn.disabled = false;
   }
   return <form id={attributes.id} className={attributes.class} onSubmit={submit}>{domToReact(domNode.children)}</form>;
 }
