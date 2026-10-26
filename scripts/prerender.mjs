@@ -23,7 +23,7 @@ try {
     const structured = page.structuredData.map((data) => `<script type="application/ld+json">${JSON.stringify(data).replaceAll('<', '\\u003c')}</script>`).join('');
     const metadata = `<meta name="description" content="${description}"><link rel="canonical" href="${canonical}">` +
       `<meta property="og:type" content="website"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${canonical}">` +
-      `<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://rkpurilaw.com/social-card.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Rakesh Puri & Associates — Law, Investigation, Experience"><meta name="twitter:image" content="https://rkpurilaw.com/social-card.png">` +
+      `<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://rkpurilaw.com/social-card.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="RK Puri Law wordmark"><meta name="twitter:image" content="https://rkpurilaw.com/social-card.png">` +
       (page.noindex ? '<meta name="robots" content="noindex,follow">' : '') + structured;
     const markup = renderToString(React.createElement(App, { path }));
     const html = template.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>${metadata}`)

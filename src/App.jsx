@@ -20,7 +20,7 @@ function normalise(path) {
 function Header({ path }) {
   const [open, setOpen] = useState(false);
   return <header className="site-header"><div className="shell header-inner">
-    <a className="brand" href="/" aria-label="R.K. Puri Law & Associates home"><span className="brand-monogram">RP</span><span><strong>R.K. PURI LAW <em>&amp;</em> ASSOCIATES</strong><small>CRIMINAL LAW · INVESTIGATION · LITIGATION</small></span></a>
+    <a className="brand" href="/" aria-label="R.K. Puri Law home"><img className="brand-logo" src="/rk-puri-logo.png" width="1767" height="370" alt="R.K. Puri Law" /></a>
     <button className="menu-toggle" type="button" aria-controls="site-nav" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}><span/><span/><span/></button>
     <nav id="site-nav" className={`site-nav${open ? ' open' : ''}`} aria-label="Main navigation">
       {nav.map(([label, href]) => <a key={href} href={href} className={path === href ? 'active' : ''} onClick={() => setOpen(false)}>{label}</a>)}
@@ -32,8 +32,7 @@ function Header({ path }) {
 function Footer() {
   return <footer className="site-footer"><div className="shell footer-grid">
     <div className="footer-about">
-      <div className="footer-mark">RKP<span>.</span></div>
-      <h2>R.K. Puri Law</h2>
+      <img className="footer-logo" src="/rk-puri-logo-light.png" width="1767" height="370" alt="R.K. Puri Law" />
       <p className="footer-descriptor">Criminal Law | Investigation Advisory | Litigation</p>
       <p>A Jodhpur-based legal practice led by Rakesh Puri, advocate and retired Additional Superintendent of Police, combining 35 years of policing and investigative experience with 11 years of criminal legal practice.</p>
     </div>
