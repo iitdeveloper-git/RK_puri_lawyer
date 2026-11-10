@@ -75,13 +75,18 @@ function Footer() {
   <div className="shell photo-credit">Court photograph: <a href="https://commons.wikimedia.org/wiki/File:New_Rajasthan_High_Court_Building.jpg" target="_blank" rel="noopener noreferrer">TrendSPLEND / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Format unchanged.</div></footer>;
 }
 
-function Acknowledgement() {
+const LEGAL_PATHS = ['/disclaimer/', '/privacy-policy/', '/terms/', '/non-solicitation-policy/'];
+const ACK_KEY = 'rkp_ack_v2';
+
+function Acknowledgement({ path }) {
   const [visible, setVisible] = useState(false);
   const dialog = useRef(null);
+  const onLegalPage = LEGAL_PATHS.includes(path);
   useEffect(() => {
-    try { setVisible(localStorage.getItem('rkp_ack_v1') !== 'yes'); }
+    if (onLegalPage) { setVisible(false); return; }
+    try { setVisible(localStorage.getItem(ACK_KEY) !== 'yes'); }
     catch { setVisible(true); }
-  }, []);
+  }, [onLegalPage]);
   useEffect(() => {
     if (!visible) return;
     const oldOverflow = document.body.style.overflow;
@@ -97,14 +102,23 @@ function Acknowledgement() {
     if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
   function accept() {
-    try { localStorage.setItem('rkp_ack_v1', 'yes'); } catch { /* session only */ }
+    try { localStorage.setItem(ACK_KEY, 'yes'); } catch { /* session only */ }
     setVisible(false);
   }
+  function exit() {
+    window.location.replace('https://www.google.com/');
+  }
   return <div className="ack" ref={dialog} role="dialog" aria-modal="true" aria-labelledby="ack-title" hidden={!visible} onKeyDown={trapFocus}><div className="ack-card">
-    <p className="eyebrow">VISITOR ACKNOWLEDGEMENT</p><h2 id="ack-title">Before you continue</h2>
-    <p>This website contains general information about the professional background and practice of Rakesh Puri &amp; Associates. It is not an advertisement, solicitation, or legal advice. Visiting it does not create an advocate–client relationship.</p>
-    <p>By continuing, you confirm that you are seeking information of your own accord. Please review the <a href="/disclaimer/">full disclaimer</a> and <a href="/non-solicitation-policy/">non-solicitation policy</a>.</p>
-    <button id="ack-accept" className="button button-dark" type="button" onClick={accept}>I understand</button>
+    <p className="eyebrow">IMPORTANT NOTICE</p><h2 id="ack-title">Disclaimer &amp; Confirmation</h2>
+    <p>As per the rules of the Bar Council of India, Rakesh Puri &amp; Associates is not permitted to advertise or solicit work through this website.</p>
+    <p>By clicking “I Agree”, you acknowledge that you are visiting this website voluntarily for general information purposes only. The information available on this website does not constitute legal advice, solicitation, advertisement, or an invitation to create an advocate–client relationship.</p>
+    <p>Any information provided through this website should not be acted upon without seeking professional legal advice based on the specific facts and circumstances of your matter.</p>
+    <p>Submission of any enquiry form or communication through this website does not create an advocate–client relationship unless formally accepted by Rakesh Puri &amp; Associates.</p>
+    <div className="ack-actions">
+      <button id="ack-accept" className="button button-dark" type="button" onClick={accept}>I Agree</button>
+      <button className="button button-outline" type="button" onClick={exit}>Exit</button>
+    </div>
+    <div className="ack-links"><a href="/disclaimer/">Disclaimer</a><a href="/privacy-policy/">Privacy Policy</a><a href="/terms/">Terms of Use</a></div>
   </div></div>;
 }
 
@@ -207,7 +221,7 @@ export function App({ path = '/' }) {
   useEffect(() => { if (window.location.pathname === '/contact/' && new URLSearchParams(window.location.search).get('enquiry') === 'consultation') { const field = document.querySelector('select[name="enquiry"]'); if (field) field.value = 'Consultation & fee enquiry'; } }, []);
   const currentPath = normalise(path);
   const page = pages[currentPath] || pages['/404/'];
-  return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement/><FloatingActions/></>;
+  return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement path={currentPath}/><FloatingActions/></>;
 }
 
 export { pages, normalise };
