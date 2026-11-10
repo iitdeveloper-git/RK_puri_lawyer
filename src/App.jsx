@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import parse, { domToReact } from 'html-react-parser';
 import pages from './content/pages.json';
+import posts from './content/posts.json';
 
 const nav = [['Home','/'],['The Firm','/about/'],['Founder','/founder/'],['Practice Areas','/practice-areas/'],['Team','/team/'],['Contact','/contact/']];
 const TAGLINE = 'When Expertise meets Ends of Justice';
@@ -17,6 +18,31 @@ function SocialIcon({ name }) {
 
 function normalise(path) {
   return path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`;
+}
+
+const fmtDate = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+const sortedPosts = posts.filter((x) => !x.draft).sort((a, b) => b.date.localeCompare(a.date));
+
+function KnowledgeCards({ limit }) {
+  const list = limit ? sortedPosts.slice(0, limit) : sortedPosts;
+  if (!list.length) return <div className="knowledge-soon"><p className="eyebrow">COMING SOON</p><h3>Articles are on the way</h3><p>Reviewed commentary on criminal law, bail, investigation and evidence will be published here.</p></div>;
+  return <div className="knowledge-grid">{list.map((post) => <a key={post.slug} className="knowledge-card" href={`/insights/${post.slug}/`}>
+    <span className="card-index">{post.category}</span><h3>{post.title}</h3><p>{post.excerpt}</p><span className="knowledge-meta">{fmtDate(post.date)}</span><span className="text-link">Read</span>
+  </a>)}</div>;
+}
+
+function PostPage({ post }) {
+  return <>
+    <section className="page-hero"><div className="shell">
+      <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Knowledge</a><span aria-hidden="true">/</span><span>{post.title}</span></nav>
+      <p className="eyebrow">{post.category.toUpperCase()}</p><h1>{post.title}</h1><p className="lead">{fmtDate(post.date)} · {post.author}</p>
+    </div></section>
+    <section className="section"><div className="shell narrow prose">
+      {parse(post.body)}
+      <p className="post-note">This article is for general information only and is not legal advice. Please read the <a href="/disclaimer/">Disclaimer</a>.</p>
+      <div className="link-row"><a className="text-link" href="/insights/">All knowledge posts</a><a className="text-link" href="/contact/">Connect</a></div>
+    </div></section>
+  </>;
 }
 
 function Header({ path }) {
@@ -42,6 +68,7 @@ function Footer() {
     <div>
       <h3>Explore</h3>
       {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+      <a href="/insights/">Knowledge</a>
     </div>
     <div>
       <h3>Policies &amp; Notice</h3>
@@ -199,13 +226,16 @@ function PageContent({ html }) {
   return parse(html, { replace(node) {
     if (node.name === 'form' && node.attribs?.id === 'contact-form') return <ContactForm domNode={node} />;
     if (node.name === 'div' && node.attribs?.class?.split(' ').includes('hero-visual')) return <HeroVisual />;
+    if (node.name === 'div' && node.attribs?.class?.split(' ').includes('knowledge-latest')) return <KnowledgeCards limit={3} />;
+    if (node.name === 'div' && node.attribs?.class?.split(' ').includes('knowledge-list')) return <div className="shell"><KnowledgeCards /></div>;
   } });
 }
 
 export function App({ path = '/' }) {
   const currentPath = normalise(path);
+  const post = currentPath.startsWith('/insights/') ? sortedPosts.find((x) => `/insights/${x.slug}/` === currentPath) : null;
   const page = pages[currentPath] || pages['/404/'];
-  return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}><PageContent html={page.content}/>{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement path={currentPath}/><FloatingActions/></>;
+  return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}>{post ? <PostPage post={post}/> : <PageContent html={page.content}/>}{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement path={currentPath}/><FloatingActions/></>;
 }
 
 export { pages, normalise };
