@@ -49,3 +49,7 @@
 @media(max-width:960px){.support-grid{grid-template-columns:1fr;gap:32px}.knowledge-grid{grid-template-columns:1fr}.hero-portrait{max-height:420px}}
 .knowledge-meta{font-size:12px;color:var(--muted);letter-spacing:.04em}.post-note{margin-top:40px;padding:16px 20px;background:var(--teal-pale);border-left:4px solid var(--teal);font-size:14px!important;color:var(--muted)}.prose .link-row{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px}.knowledge-list{margin-bottom:64px}
 .knowledge-soon{border:1px dashed var(--line);background:#fff;padding:48px 32px;text-align:center}.knowledge-soon h3{margin:8px 0 10px;font-size:1.5rem}.knowledge-soon p:last-child{color:var(--muted);max-width:520px;margin:0 auto}
+/* fill the last row so no grey gap shows */
+.practice-grid>:last-child:nth-child(3n+1){grid-column:span 3}.practice-grid>:last-child:nth-child(3n+2){grid-column:span 2}
+@media(max-width:960px){.practice-grid>:last-child:nth-child(3n+1),.practice-grid>:last-child:nth-child(3n+2){grid-column:auto}.practice-grid>:last-child:nth-child(odd){grid-column:span 2}}
+@media(max-width:700px){.practice-grid>:last-child:nth-child(odd){grid-column:auto}}

@@ -21,17 +21,25 @@ function normalise(path) {
 }
 
 const fmtDate = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-const sortedPosts = posts.filter((x) => !x.draft).sort((a, b) => b.date.localeCompare(a.date));
+const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));
 
 function KnowledgeCards({ limit }) {
   const list = limit ? sortedPosts.slice(0, limit) : sortedPosts;
   if (!list.length) return <div className="knowledge-soon"><p className="eyebrow">COMING SOON</p><h3>Articles are on the way</h3><p>Reviewed commentary on criminal law, bail, investigation and evidence will be published here.</p></div>;
   return <div className="knowledge-grid">{list.map((post) => <a key={post.slug} className="knowledge-card" href={`/insights/${post.slug}/`}>
-    <span className="card-index">{post.category}</span><h3>{post.title}</h3><p>{post.excerpt}</p><span className="knowledge-meta">{fmtDate(post.date)}</span><span className="text-link">Read</span>
+    <span className="card-index">{post.category}</span><h3>{post.title}</h3><p>{post.excerpt}</p><span className="knowledge-meta">{post.draft ? 'Coming soon' : fmtDate(post.date)}</span><span className="text-link">Read</span>
   </a>)}</div>;
 }
 
 function PostPage({ post }) {
+  if (post.draft) return <>
+    <section className="page-hero"><div className="shell">
+      <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Knowledge</a><span aria-hidden="true">/</span><span>{post.title}</span></nav>
+      <p className="eyebrow">{post.category.toUpperCase()}</p><h1>{post.title}</h1><p className="lead">Coming soon</p>
+    </div></section>
+    <section className="section"><div className="shell narrow"><div className="knowledge-soon"><p className="eyebrow">COMING SOON</p><h3>This article is being prepared</h3><p>It will be published here after review by the advocate.</p></div>
+      <div className="link-row" style={{ marginTop: 28 }}><a className="text-link" href="/insights/">All knowledge posts</a></div></div></section>
+  </>;
   return <>
     <section className="page-hero"><div className="shell">
       <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Knowledge</a><span aria-hidden="true">/</span><span>{post.title}</span></nav>
@@ -233,7 +241,7 @@ function PageContent({ html }) {
 
 export function App({ path = '/' }) {
   const currentPath = normalise(path);
-  const post = currentPath.startsWith('/insights/') ? sortedPosts.find((x) => `/insights/${x.slug}/` === currentPath) : null;
+  const post = currentPath.startsWith('/insights/') ? posts.find((x) => `/insights/${x.slug}/` === currentPath) : null;
   const page = pages[currentPath] || pages['/404/'];
   return <><a className="skip" href="#main">Skip to content</a><Header path={currentPath}/><main id="main" className={currentPath === '/' ? 'page-home' : ''}>{post ? <PostPage post={post}/> : <PageContent html={page.content}/>}{currentPath === '/about/' && <EditorialPhoto />}</main><Footer/><Acknowledgement path={currentPath}/><FloatingActions/></>;
 }
