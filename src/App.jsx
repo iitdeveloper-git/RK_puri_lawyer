@@ -191,7 +191,7 @@ function HeroVisual() {
 function EditorialPhoto() {
   return <section className="editorial-photo-section" aria-label="Illustrative legal research photograph"><div className="shell editorial-photo-grid">
     <figure><img src="/placeholder-research.webp" alt="Illustrative legal research desk with an open law book and case files" width="1448" height="1086" loading="lazy" decoding="async" /><figcaption>Illustrative image · Replace with an approved practice photograph</figcaption></figure>
-    <div><p className="eyebrow">PREPARATION &amp; PERSPECTIVE</p><h2>Every detail deserves careful attention.</h2><p>From the first review of a record to the final presentation of a matter, careful preparation gives advocacy its foundation.</p><a className="text-link" href="/contact/">Contact chambers <span aria-hidden="true">↗</span></a></div>
+    <div><p className="eyebrow">PREPARATION &amp; PERSPECTIVE</p><h2>Every detail deserves careful attention.</h2><p>From the first review of a record to the final presentation of a matter, careful preparation gives advocacy its foundation.</p><a className="text-link" href="/contact/">Contact chambers</a></div>
   </div></section>;
 }
 
