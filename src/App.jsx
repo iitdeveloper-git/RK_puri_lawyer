@@ -4,7 +4,7 @@ import pages from './content/pages.json';
 import posts from './content/posts.json';
 
 const nav = [['Home','/'],['The Firm','/about/'],['Founder','/founder/'],['Practice Areas','/practice-areas/'],['Team','/team/'],['Contact','/contact/']];
-const TAGLINE = 'When Expertise meets Ends of Justice';
+const TAGLINE = 'When expertise meets the ends of justice…';
 const FIRM_EMAIL = 'Rkpur6@gmail.com';
 const socialLinks = [
   ['LinkedIn', 'https://www.linkedin.com/in/rakesh-kumar-puri-0918181a9/'], ['Instagram', ''], ['Facebook', ''],
